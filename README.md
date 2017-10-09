@@ -1,0 +1,2 @@
+# rngbot
+Renegades discord bot
