@@ -12,13 +12,33 @@ handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w'
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
 
-bot = commands.Bot(command_prefix='!rng', description='Renegades discord bot')
+bot = commands.Bot(command_prefix='!', description='Renegades discord bot')
 
 
 # Executed on bot login
 @bot.event
 async def on_ready():
     print('Logged in as ' + bot.user.name)
+
+
+@bot.event
+async def on_resumed():
+    print('Session resumed')
+
+
+@bot.event
+async def on_member_join(member):
+    pass
+
+
+@bot.event
+async def on_member_remove(member):
+    pass
+
+
+@bot.event
+async def on_message(message):
+    pass
 
 
 # Say command
@@ -28,4 +48,6 @@ async def say(arg):
     await bot.say(arg)
 
 
+# How to change game:
+# await client.change_presence(game=discord.Game(name='my game'))
 bot.run(token)
