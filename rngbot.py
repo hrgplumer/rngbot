@@ -1,5 +1,5 @@
-import logging
 import discord
+import logging
 from discord.ext import commands
 
 # Bot token
@@ -28,7 +28,11 @@ async def on_resumed():
 
 @bot.event
 async def on_member_join(member):
-    pass
+    # get general channel
+    general = discord.utils.find(lambda c: c.name.upper() == 'GENERAL', member.server.channels)
+    # send join message
+    join_msg = member.mention + ' has joined this server.'
+    await bot.send_message(general, join_msg)
 
 
 @bot.event
