@@ -8,6 +8,7 @@ October 2017
 import discord
 import logging
 from discord.ext import commands
+import helpers
 
 # Bot token
 token = "MzY3MDMyMzA2ODU2MjMwOTIz.DL1qsQ.09KzvOqRtkCKGW0SbDWcJstOgrQ"
@@ -46,7 +47,7 @@ async def on_member_join(member):
     :param member: A Member object representing the user that joined.
     """
     # Find the general channel object
-    general = discord.utils.find(lambda c: c.name.upper() == 'GENERAL', member.server.channels)
+    general = helpers.get_channel('general', member.server)
     # send join message to general
     join_msg = member.mention + ' has joined this server.'
     await bot.send_message(general, join_msg)
@@ -58,7 +59,11 @@ async def on_member_remove(member):
     Member leaves server event
     :param member: A Member object representing the user that left.
     """
-    pass  # do nothing
+    # Find the general channel object
+    general = helpers.get_channel('general', member.server)
+    # send leave message to general
+    leave_msg = member.name + ' has left this server.'
+    await bot.send_message(general, leave_msg)
 
 
 @bot.event
