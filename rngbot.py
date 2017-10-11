@@ -5,13 +5,17 @@ author: John Connor
 October 2017
 """
 
-import discord
 import logging
 from discord.ext import commands
 import helpers
+import rngbot_config
+
+# Get config values from file
+config_file_name = 'botconfig.json'
+config_values = rngbot_config.read_config_file(config_file_name)
 
 # Bot token
-token = "MzY3MDMyMzA2ODU2MjMwOTIz.DL1qsQ.09KzvOqRtkCKGW0SbDWcJstOgrQ"
+token = config_values.token
 
 # Set up bot logs
 logger = logging.getLogger('discord')
@@ -21,7 +25,7 @@ handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(me
 logger.addHandler(handler)
 
 # bot init
-bot = commands.Bot(command_prefix='!', description='Renegades discord bot')
+bot = commands.Bot(command_prefix=config_values.command_prefix, description='Renegades discord bot')
 
 
 @bot.event
@@ -47,9 +51,9 @@ async def on_member_join(member):
     :param member: A Member object representing the user that joined.
     """
     # Find the general channel object
-    general = helpers.get_channel('general', member.server)
+    general = helpers.get_channel(config_values.general_channel_name, member.server)
     # send join message to general
-    join_msg = member.mention + ' has joined this server.'
+    join_msg = member.mention + config_values.join_msg
     await bot.send_message(general, join_msg)
 
 
@@ -60,9 +64,9 @@ async def on_member_remove(member):
     :param member: A Member object representing the user that left.
     """
     # Find the general channel object
-    general = helpers.get_channel('general', member.server)
+    general = helpers.get_channel(config_values.general_channel_name, member.server)
     # send leave message to general
-    leave_msg = member.name + ' has left this server.'
+    leave_msg = member.name + config_values.leave_msg
     await bot.send_message(general, leave_msg)
 
 

@@ -1,0 +1,7 @@
+{
+    "join_message": " has joined this server.",
+    "leave_message": " has left this server.",
+    "general_channel_name": "general",
+    "discord_token": "MzY3MDMyMzA2ODU2MjMwOTIz.DL1qsQ.09KzvOqRtkCKGW0SbDWcJstOgrQ",
+    "bot_command_prefix": "!"
+}
