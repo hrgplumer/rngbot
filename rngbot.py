@@ -2,15 +2,20 @@
 Renegades Discord Bot
 
 author: John Connor
-October 2017
+date: October 2017
 """
 
+import discord
 import logging
 from discord.ext import commands
 import helpers
 import rngbot_config
 
-# Get config values from file
+"""
+This bot requires Manage Server, Manage Message permissions
+"""
+
+# Read config values from file
 config_file_name = 'botconfig.json'
 config_values = rngbot_config.read_config_file(config_file_name)
 
@@ -70,13 +75,13 @@ async def on_member_remove(member):
     await bot.send_message(general, leave_msg)
 
 
-@bot.event
-async def on_message(message):
-    """
-    Message sent event. This is fired for every message sent in this server
-    :param message: A Message object containing the message info.
-    """
-    pass  # do nothing
+# @bot.event
+# async def on_message(message):
+#     """
+#     Message sent event. This is fired for every message sent in this server
+#     :param message: A Message object containing the message info.
+#     """
+#     pass  # do nothing
 
 
 @bot.command()
@@ -85,6 +90,36 @@ async def say(arg):
     :param arg: The text to repeat back.
     """
     await bot.say(arg)
+
+
+@bot.command(pass_context=True)
+async def clear(context, num_messages: int):
+    """
+    Clear: Deletes the last x messages.
+    :param context: Bot context
+    :param num_messages: The number of messages to delete.
+    :return: Nothing
+    """
+    if num_messages > 10:
+        await bot.say('Limit is 10 messages.')
+        return
+    if num_messages is None or num_messages <= 0:
+        await bot.say('Tell me how many messages to clear.')
+        return
+
+    # Check user has proper permissions here
+    if not context.message.author.server_permissions.manage_messages:
+        await bot.say('You don''t have permission to do this.')
+        return
+
+    try:
+        await bot.purge_from(context.message.channel, limit=num_messages)
+    except discord.Forbidden:
+        await bot.say('You don''t have permission to do this.')
+        return
+    except discord.HTTPException:
+        await bot.say('Something went wrong.')
+        return
 
 
 # How to change game:
